@@ -2,7 +2,8 @@ require("dotenv").config();
 const authentication=require("../auth")
 const express = require("express");
 const router = express.Router();
-const {get,getbyID}=require("../controller/department.con")
+
+const {get1,getbyID}=require("../controller/department.con")
 
 const {getCategories,getCategoriesbyID,getCategoriesby_p_ID,getCategoriesby_d_ID}=require("../controller/categories.con")
 
@@ -14,7 +15,7 @@ const {findbyId,register,updatec,UPDATEcustomerADDRESS,UserLogin,delete1,UPDATEc
 
 const { order,getOrder, getOrderBYc_id ,getordrDetail} = require("../controller/orders");
 
-const {generateId,addShopping_cart, getp,delete2, Update}=require("../controller/shoppingCart")
+const {generateId,addShopping_cart, getp,delete2, Update1,getAmount,removeProduct}=require("../controller/shoppingCart")
 
 const {gettax,gettaxById}=require("../controller/tax.con")
 
@@ -22,9 +23,11 @@ const {getshipping,getShippingById}=require("../controller/shipping.region")
 
 const cookieparser=require("cookie-parser");
 router.use(cookieparser());
+
 // department
-router.get("/departments",get);
 router.get("/departments/:id",getbyID);
+router.get("/departments",get1);
+
 
 // category
 router.get("/categories",getCategories);
@@ -32,11 +35,14 @@ router.get("/categories/:id",getCategoriesbyID);
 router.get("/categories/inProduct/:id",getCategoriesby_p_ID)
 router.get("/categories/inDepartment/:id",getCategoriesby_d_ID)
 
+
+
 // attribute
 router.get("/attributes",getattributes);
 router.get("/attributes/:id",getattributebyID);
 router.get("/attributes/values/:id",getValue);
 router.get("/attributes/inProduct/:id",getallattribut);
+
 
 
 
@@ -66,22 +72,19 @@ router.put("/creditcard",authentication,UPDATEcustomercreadit)
 // orders
 router.post("/orders",authentication,order)
 router.get("/orders/incustomer",authentication,getOrderBYc_id)
-router.get("/orders/:id",authentication,getOrder)
 router.get("/orders/shortdetail/:id",authentication,getordrDetail)
+router.get("/orders/:id",authentication,getOrder)
 
 
 
 // shopping cart
 router.get("/shoppingcart/generatUniqueId",generateId)
 router.get("/shoppingcart/:id",getp)
-
 router.post("/shoppingcart/add",addShopping_cart)
-router.delete("/delete2/:id",delete2)
-router.put("/shoppingcart/update/:id",Update)
-
-
-
-
+router.delete("/shoppingcart/empty/:id",delete2)
+router.put("/shoppingcart/update/:id",Update1)
+router.get("/shoppingcart/totalAmount/:id",getAmount)
+router.delete("/shoppingcart/removeProduct/:id",removeProduct)
 
 
 // tax
