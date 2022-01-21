@@ -2,7 +2,7 @@ const knex = require("../database/db");
 
 
 
-get=(req, res) => {
+get1=(req, res) => {
     knex
       .select("*")
       .from("department")
@@ -36,5 +36,5 @@ getbyID=(req, res) => {
       });
   };
 
-module.exports={get,getbyID}
+module.exports={get1,getbyID}
   
