@@ -100,7 +100,7 @@ categoryId=(req, res) => {
     .limit(limit_q).offset(page_q)
     .then((data) => {
       console.log(data);
-      res.json({ "count":data.length,
+      res.json({
       "row": data });
     })
     .catch((er) => {
@@ -130,10 +130,6 @@ departmentId=(req, res) => {
     .join("product_category","category.category_id","product_category.category_id")
     .join("product","product_category.product_id","product.product_id")
     .where("category.department_id",'=',parseInt(req.params.id))
-    // .select("*")
-    // .from("category")
-    // .join("product_category","category.category_id","product_category.category_id")
-    // .where("category.department_id",'=',parseInt(req.params.id))
     .limit(limit_q).offset(page_q)
     .then((data) => {
       console.log(data);
@@ -154,9 +150,7 @@ getDetailbyID=(req, res) => {
     .from("product").where(" product. product_id",'=',parseInt(req.params.id))
     .then((data) => {
       console.log(data);
-      res.json({ "success": true,
-      "status": 200,
-      "user": data });
+      res.json(data );
     })
     .catch((er) => {
       console.log(er);
@@ -172,7 +166,7 @@ getLocation=(req, res) => {
     .from("product_category")
     .join("category","product_category.category_id","category.category_id")
     .join("department","category.department_id","department.department_id")
-    .where("product_category.product_id",'=',parseInt(req.params.id))
+    .where("product_category.product_id",'=',req.params.id)
      .then((data) => {
       console.log(data);
       res.json( data );
@@ -187,9 +181,9 @@ getLocation=(req, res) => {
 
  getReview=(req, res) => {
   knex
-  .select("*")
-    .from("Review")
-    .join("customer","Review.customer_id","customer.customer_id")
+  .select( "customer.name","review.review","review.rating","review.created_on " )
+    .from("review")
+    .join("customer","review.customer_id","customer.customer_id")
     .where("product_id",parseInt(req.params.id))
   .then((data) => {
     console.log(data);
@@ -206,22 +200,17 @@ getLocation=(req, res) => {
 Postreview=(req,res)=>{
   reviews={
       product_id :req.params.id, 
-      review :req.body.review,   
+      review :"wertyuio",   
       rating:req.body.rating ,
-      customer_id:res.tokendata.customer_id
+      customer_id:res.tokendata.customer_id,
+      created_on:new Date()
 
          
     }
-    knex("Review").insert(reviews)
+    // console.log(req.body.review);
+    knex("review").insert(reviews)
     .then((data)=>{
-      console.log(data);
-      if (res.errno=1062){
-        res.send({message:"you already post review"})
-      }
-      else{
       res.send({message:"review post succesfuly"})
-    }
-
     }).catch((err)=>{
       res.send(err)
       console.log(err);
